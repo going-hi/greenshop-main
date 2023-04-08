@@ -19,7 +19,7 @@ import { UserModule } from './user/user.module';
     AuthModule,
     UserModule,
   ],
-  controllers: [RolesController],
+  controllers: [],
   providers: [],
 })
 export class AppModule {}
