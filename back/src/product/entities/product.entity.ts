@@ -1,5 +1,6 @@
+import { RatingEntity } from "src/rating/entities/rating.entity";
 import { BaseEntity } from "src/utils/base.entity";
-import { Column, Entity } from "typeorm";
+import { Column, Entity, OneToMany } from "typeorm";
 
 @Entity('product')
 export class ProductEntity extends BaseEntity {
@@ -14,4 +15,7 @@ export class ProductEntity extends BaseEntity {
 
     @Column('simple-array') 
     size: string[]
+
+    @OneToMany(() => RatingEntity, rating => rating.product)
+    ratings: RatingEntity[]
 }

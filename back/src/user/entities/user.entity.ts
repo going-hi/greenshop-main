@@ -1,7 +1,8 @@
 import { TokenEntity } from "src/auth/entities/token.entity";
+import { RatingEntity } from "src/rating/entities/rating.entity";
 import { Role } from "src/roles/roles.enum";
 import { BaseEntity } from "src/utils/base.entity";
-import { Column, Entity, OneToOne } from "typeorm";
+import { Column, Entity, OneToMany, OneToOne } from "typeorm";
 
 @Entity('users')
 export class UserEntity extends BaseEntity {
@@ -21,4 +22,7 @@ export class UserEntity extends BaseEntity {
         default: Role.USER
     })
     role: Role
+
+    @OneToMany(() => RatingEntity, rating => rating.user) 
+    ratings: RatingEntity[]
 }

@@ -11,9 +11,9 @@ export class RatingEntity extends BaseEntity {
     @Max(5)
     rating: number
 
-    @ManyToOne(() => UserEntity)
+    @ManyToOne(() => UserEntity, user => user.ratings)
     user: UserEntity
 
-    @ManyToOne(() => ProductEntity)
+    @ManyToOne(() => ProductEntity, product => product.ratings)
     product: ProductEntity
 }
