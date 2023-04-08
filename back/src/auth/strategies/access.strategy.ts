@@ -14,6 +14,6 @@ export class AccessStrategy extends PassportStrategy(Strategy, ACCESS_JWT_STRATE
     }
 
     async validate(payload: any) {
-        return {}
+        return payload
     }
 }
