@@ -1,0 +1,37 @@
+.header {
+  max-width: 1200px;
+  margin: 0 auto;
+  height: 60px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 0.3px solid rgba(70, 163, 88, 0.5);
+}
+
+.nav {
+  width: 351px;
+  display: flex;
+  justify-content: space-between;
+}
+
+.nav a {
+  font-weight: 400;
+  font-size: 16px;
+  line-height: 20px;
+  height: 58px;
+  align-items: center;
+  display: flex;
+}
+
+.header .active {
+  font-weight: 700;
+  color: #3d3d3d;
+  border-bottom: 3px solid #46a358;
+}
+
+.nav a:hover {
+  font-weight: 700;
+  color: #3d3d3d;
+  border-bottom: 3px solid #46a358;
+  transition: all 0.1s;
+}

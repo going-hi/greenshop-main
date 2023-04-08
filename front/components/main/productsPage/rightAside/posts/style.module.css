@@ -1,0 +1,11 @@
+.item {
+  width: 258px;
+  height: 350px;
+  background: green;
+}
+
+.btn{
+  border: 1px solid red;
+  cursor: pointer;
+  background: goldenrod;
+}
