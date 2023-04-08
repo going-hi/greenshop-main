@@ -32,6 +32,7 @@ export class AuthController {
   ) {
     const userData = await this.authService.registration(userDto)
     res.cookie(REFRESH_TOKEN_COOKIE, userData.refreshToken, {httpOnly: true, maxAge: 30 * 24 * 60 * 60 })
+    return userData
   }
 
   @RefreshJwtGuard()
