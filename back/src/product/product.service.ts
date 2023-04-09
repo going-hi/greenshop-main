@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -17,8 +17,8 @@ export class ProductService {
     return await this.productRepository.save(product)
   }
 
-  async findAll(limit = 10, page = 1) {
-    const products = await this.productRepository.find({
+  async findAll(limit: number, page: number) {
+    const products = await this.productRepository.findAndCount({
       take: limit,
       skip: limit * page - limit
     })
@@ -30,9 +30,25 @@ export class ProductService {
     const product = await this.productRepository.findOne({
       where: {
         id
+      },
+      relations: {
+        ratings: true
       }
     }) 
-    return product
+    if(!product) throw new NotFoundException()
+
+    let rating
+    if(!product.ratings.length) {
+      rating = 0
+    }else {
+      const ratingInt = product.ratings.map(obj => obj.rating )
+      rating = ratingInt.reduce(
+        (accumulator, currentValue) => accumulator + currentValue, 0 
+      ) / product.ratings.length
+    }
+   
+    delete product.ratings
+    return { ...product, rating }
   }
 
   async search(query: string) {
@@ -45,11 +61,13 @@ export class ProductService {
     return products
   }
 
-  update(id: number, updateProductDto: UpdateProductDto) {
-   
+  async update(id: number, updateProductDto: UpdateProductDto) {
+    const oldProduct = await this.productRepository.findOneBy({id})
+    if(!oldProduct) throw new NotFoundException()
+    return await this.productRepository.save({...oldProduct, ...updateProductDto})
   }
 
-  remove(id: number) {
-    
+  async remove(id: number) {
+    await this.productRepository.delete(id)
   }
 }
