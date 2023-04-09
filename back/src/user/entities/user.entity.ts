@@ -23,6 +23,6 @@ export class UserEntity extends BaseEntity {
     })
     role: Role
 
-    @OneToMany(() => RatingEntity, rating => rating.user) 
+    @OneToMany(() => RatingEntity, rating => rating.user, {cascade: true}) 
     ratings: RatingEntity[]
 }
