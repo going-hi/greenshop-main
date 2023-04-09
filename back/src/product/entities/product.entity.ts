@@ -16,6 +16,6 @@ export class ProductEntity extends BaseEntity {
     @Column('simple-array') 
     size: string[]
 
-    @OneToMany(() => RatingEntity, rating => rating.product)
+    @OneToMany(() => RatingEntity, rating => rating.product, {cascade: true})
     ratings: RatingEntity[]
 }
