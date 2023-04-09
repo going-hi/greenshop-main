@@ -1,17 +1,12 @@
 import React from "react";
 import style from "./style.module.css";
 import Link from "next/link";
+import Image from "next/image";
 import { useDispatch, useSelector } from "react-redux";
 import { addItem } from "../../../../../store/cart/cartSlice";
 
 const ItemAside = ({ item }) => {
   const dispatch = useDispatch();
-  // const cartItem = useSelector((state) =>
-  //   state.cart.items.find((obj) => obj.id === item.id)
-  // );
-
-  // const addedCount = cartItem ? cartItem.count : 0;
-
   const onClickAdd = () => {
     const product = {
       item,
@@ -21,15 +16,24 @@ const ItemAside = ({ item }) => {
   return (
     <>
       <div className={style.item}>
-        <h3>{item.title}</h3>
-        <h4>{item.description}</h4>
-        <h5>{item.price}</h5>
-        <Link item={item} href={`/product/${item.id}`}>
-          полный товар
-        </Link>
-        <button className={style.btn} type="button" onClick={onClickAdd}>
-          добавить
-        </button>
+        <span className={style.substrate}>
+          <img src={item.image} width={250} height={250} alt="image" />
+          <span className={style.hidden}>
+            <button className={style.btn} type="button" onClick={onClickAdd}>
+              <Image src="/basket.svg" width={20} height={20} alt="basket" />
+            </button>
+            <button className={style.btn} type="button">
+              <Image src="/like.svg" width={20} height={20} alt="like" />
+            </button>
+            <Link item={item} href={`/product/${item.id}`}>
+              <button className={style.btn} type="button">
+                <Image src="/look.svg" width={20} height={20} alt="look" />
+              </button>
+            </Link>
+          </span>
+        </span>
+        <p className={style.description}>Краткое описание</p>
+        <p className={style.price}>$ {item.price}</p>
       </div>
     </>
   );

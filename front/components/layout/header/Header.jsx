@@ -38,9 +38,15 @@ const Header = () => {
           <button onClick={() => dispatch(removeUser())}>Выйти {email}</button>
         ) : (
           <Link href="/login">
-            <button type="button">Login</button>
+            <button type="button">войти</button>
           </Link>
         )}
+        <Link href="/registration">
+          <span>регистрация</span>
+        </Link>
+        <Link href="/login">
+          <button type="button">войти</button>
+        </Link>
         <Link href="/basket">
           <span>корзина:{items.length}</span>
         </Link>

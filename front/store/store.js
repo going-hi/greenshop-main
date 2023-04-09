@@ -10,5 +10,6 @@ export const store = configureStore({
     user: userReducer,
   },
   middleware: (getDefaultMiddleware) =>
-    getDefaultMiddleware().concat(productApi.middleware),
+    getDefaultMiddleware().concat([productApi.middleware]),
+  devTools: true,
 });

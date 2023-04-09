@@ -18,6 +18,7 @@ const Item = ({ products }) => {
     <div>
       {products.title}
       <h1> {products.description}</h1>
+      <h2>{products.rating.rate}</h2>
     </div>
   );
 };

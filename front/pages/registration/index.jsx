@@ -1,37 +1,41 @@
-import Link from "next/link";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import React from "react";
-import { useDispatch } from "react-redux";
-import Form from "@/components/form/form";
-import { setUser } from "@/store/slices/userSlice";
+import { instance } from "@/axios";
 
 const Register = () => {
-  const dispatch = useDispatch();
-
-  const handleRegister = (email, password) => {
-    const auth = getAuth();
-    console.log(auth);
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(({ user }) => {
-        console.log(user);
-        dispatch(
-          setUser({
-            email: user.email,
-            id: user.uid,
-            token: user.accesToken,
-          })
-        );
-      })
-      .catch(console.error);
+  const [email, setEmail] = React.useState("");
+  const [password, setPassword] = React.useState("");
+  // const [repeatPassword, setRepeatPassword] = React.useState("");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const userData = {
+      email,
+      password,
+      // repeatPassword,
+    };
+    const newUser = await instance.post("/api/auth/registration", userData);
+    console.log(newUser.data);
   };
-
   return (
     <>
-      <h1>Регистрация</h1>
-      <Form title="Регистрация" handleClick={handleRegister} />
-      <p>
-        Уже есть аккаунт? <Link href="/login">Войти</Link>
-      </p>
+      <h2>Регистрация</h2>
+      <form onSubmit={handleSubmit}>
+        <input
+          type="email"
+          placeholder="Почта"
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <input
+          type="password"
+          placeholder="пароль"
+          onChange={(e) => setPassword(e.target.value)}
+        />
+        {/* <input
+          type="password"
+          placeholder="повторите пароль"
+          onChange={(e) => setRepeatPassword(e.target.value)}
+        /> */}
+        <button type="submit">кнопка</button>
+      </form>
     </>
   );
 };
