@@ -1,7 +1,8 @@
 import { UserEntity } from "src/user/entities/user.entity";
-import { BaseEntity, Column, Entity, ManyToOne } from "typeorm";
+import { Column, Entity, ManyToOne } from "typeorm";
 import { IsInt, Min, Max } from "class-validator";
 import { ProductEntity } from "src/product/entities/product.entity";
+import { BaseEntity } from "src/utils/base.entity";
 
 @Entity('rating')
 export class RatingEntity extends BaseEntity {
