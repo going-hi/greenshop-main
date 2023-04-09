@@ -1,6 +1,5 @@
 import { Injectable } from '@nestjs/common';
 import { CreateRatingDto } from './dto/create-rating.dto';
-import { UpdateRatingDto } from './dto/update-rating.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { RatingEntity } from './entities/rating.entity';
 import { Repository } from 'typeorm';
@@ -12,11 +11,19 @@ export class RatingService {
     @InjectRepository(RatingEntity) private readonly ratingRepository: Repository<RatingEntity>
   ) {}
 
-  async create(createRatingDto: CreateRatingDto) {
+  async create(userId: number, createRatingDto: CreateRatingDto) {
     const oldRating = await this.ratingRepository.findOne({
       where: {
-        user: {id: createRatingDto.userId},
+        user: {id: userId},
         product: {id: createRatingDto.productId}
+      },
+      relations: {
+        user: true,
+        product: true
+      },
+      select: {
+        user: {id: true},
+        product: {id: true}
       }
     })
 
@@ -27,13 +34,22 @@ export class RatingService {
 
     const rating = this.ratingRepository.create({
       rating: createRatingDto.rating, 
-      user: {id: createRatingDto.userId}, 
+      user: {id: userId}, 
       product: {id: createRatingDto.productId}
     })
     return await this.ratingRepository.save(rating)
   }
 
-  async remove(id: number) {
-    await this.ratingRepository.delete(id)
+  async remove(userId: number, productId: number) {
+    await this.ratingRepository.delete({product: {id: productId}, user: {id: userId}})
+  }
+
+  async getUserRatings(userId: number) {
+    const ratings = await this.ratingRepository.find({
+      where: {user: {id: userId}},
+      relations: {product: true}
+    })
+
+    return ratings
   }
 }
