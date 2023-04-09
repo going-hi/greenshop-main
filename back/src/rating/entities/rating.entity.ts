@@ -12,9 +12,9 @@ export class RatingEntity extends BaseEntity {
     @Max(5)
     rating: number
 
-    @ManyToOne(() => UserEntity, user => user.ratings)
+    @ManyToOne(() => UserEntity, user => user.ratings, {onDelete: 'CASCADE'})
     user: UserEntity
 
-    @ManyToOne(() => ProductEntity, product => product.ratings)
+    @ManyToOne(() => ProductEntity, product => product.ratings, {onDelete: 'CASCADE'})
     product: ProductEntity
 }
