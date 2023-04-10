@@ -18,7 +18,10 @@ export class UserService {
         return user
     }
 
-    async setRoleUser(userId: number, role: Role) {
-        await this.userRepository.update(userId, {role})
+    async setRoleUser(id: number, role: Role) {
+        const user = await this.userRepository.findOneBy({id})
+        if(user.role === Role.OWNER) return
+        
+        return await this.userRepository.save({...user, role})
     }
 }
