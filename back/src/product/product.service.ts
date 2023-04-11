@@ -4,16 +4,19 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductEntity } from './entities/product.entity';
 import { Between, ILike, LessThan, Repository } from 'typeorm';
+import { FileService } from 'src/file/file.service';
 
 @Injectable()
 export class ProductService {
 
   constructor(
-    @InjectRepository(ProductEntity) private readonly productRepository: Repository<ProductEntity>
+    @InjectRepository(ProductEntity) private readonly productRepository: Repository<ProductEntity>,
+    private readonly fileService: FileService
   ) {}
 
-  async create(createProductDto: CreateProductDto) {
-    const product = this.productRepository.create(createProductDto)
+  async create(createProductDto: CreateProductDto, file: Express.Multer.File) {
+    const fileName = await this.fileService.saveFile(file)
+    const product = this.productRepository.create({...createProductDto, photo: fileName})
     return await this.productRepository.save(product)
   }
 
@@ -68,7 +71,11 @@ export class ProductService {
   }
 
   async remove(id: number) {
-    await this.productRepository.delete(id)
+    const product = await this.productRepository.findOneBy({id})
+    if(!product) throw new NotFoundException()
+
+    await this.fileService.removeFile(product.photo)
+    await this.productRepository.remove(product)
   }
 
   async filter(fromPrice: number, toPrice = NaN) {
