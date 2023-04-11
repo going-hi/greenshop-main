@@ -48,3 +48,8 @@ button {
   border: 0;
   color: white;
 }
+
+.activeSize {
+  border: 1px solid #46a358 !important;
+  color: #46a358 !important;
+}

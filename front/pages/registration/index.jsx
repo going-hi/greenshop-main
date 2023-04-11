@@ -1,39 +1,59 @@
 import React from "react";
-import { instance } from "@/axios";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchRegister, selectIsAuth } from "@/store/auth/authSlice";
+import { useRouter } from "next/router";
 
 const Register = () => {
-  const [email, setEmail] = React.useState("");
-  const [password, setPassword] = React.useState("");
-  // const [repeatPassword, setRepeatPassword] = React.useState("");
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    const userData = {
-      email,
-      password,
-      // repeatPassword,
-    };
-    const newUser = await instance.post("/api/auth/registration", userData);
-    console.log(newUser.data);
+  const isAuth = useSelector(selectIsAuth);
+  const dispatch = useDispatch();
+  const router = useRouter(selectIsAuth);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    mode: "onChange",
+  });
+
+  const onSubmit = async (values) => {
+    const data = await dispatch(fetchRegister(values));
+    console.log(data);
+
+    if (!data.payload) {
+      return alert("Не удалось зарегестироватся");
+    }
+
+    if ('accessToken' in data.payload) {
+      window.localStorage.setItem("accessToken", data.payload.accessToken);
+    }
   };
+
+  if (isAuth) {
+    router.push("/");
+    return null;
+  }
+
   return (
     <>
       <h2>Регистрация</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit(onSubmit)}>
         <input
           type="email"
           placeholder="Почта"
-          onChange={(e) => setEmail(e.target.value)}
+          {...register("email", { require: "Укажите почту" })}
         />
+        <p>{errors.email?.message}</p>
         <input
           type="password"
           placeholder="пароль"
-          onChange={(e) => setPassword(e.target.value)}
+          {...register("password", { require: "Укажите пароль" })}
         />
-        {/* <input
-          type="password"
-          placeholder="повторите пароль"
-          onChange={(e) => setRepeatPassword(e.target.value)}
-        /> */}
+        <p>{errors.password?.message}</p>
         <button type="submit">кнопка</button>
       </form>
     </>

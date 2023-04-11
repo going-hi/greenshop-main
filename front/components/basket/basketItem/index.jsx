@@ -9,7 +9,7 @@ const BasketItem = ({ item }) => {
      товар
       <h1>{item.title}</h1>
       <h2>{item.price}</h2>
-      <h3>{count}</h3>
+      <h3>{item.rating.count}</h3>
       {totalPrice}
      </span>
     </>
