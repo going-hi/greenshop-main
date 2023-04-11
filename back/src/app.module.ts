@@ -1,3 +1,4 @@
+import { FileModule } from './file/file.module';
 import { RolesModule } from './roles/roles.module';
 import { RolesController } from './roles/roles.controller';
 import { Module } from '@nestjs/common';
@@ -11,6 +12,7 @@ import { RatingModule } from './rating/rating.module';
 
 @Module({
   imports: [
+    FileModule,
     RolesModule,
     ConfigModule.forRoot(),
     TypeOrmModule.forRootAsync({
