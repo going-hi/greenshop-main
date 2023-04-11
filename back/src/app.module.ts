@@ -9,6 +9,7 @@ import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ProductModule } from './product/product.module';
 import { RatingModule } from './rating/rating.module';
+import { CategoryModule } from './category/category.module';
 
 @Module({
   imports: [
@@ -24,6 +25,7 @@ import { RatingModule } from './rating/rating.module';
     UserModule,
     ProductModule,
     RatingModule,
+    CategoryModule,
   ],
   controllers: [],
   providers: [],
