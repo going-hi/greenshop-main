@@ -13,6 +13,9 @@ export class ProductEntity extends BaseEntity {
     @Column()
     price: number
 
+    @Column()
+    photo: string
+
     @Column('simple-array') 
     size: string[]
 
