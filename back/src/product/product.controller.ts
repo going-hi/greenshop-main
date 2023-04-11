@@ -9,7 +9,16 @@ import { Role } from 'src/roles/roles.enum';
 export class ProductController {
   constructor(private readonly productService: ProductService) {}
 
-  @RolesAuth(Role.ADMIN)
+  @Get('filter') 
+  filter(
+    @Query('from') from = 0,
+    @Query('to') to: string
+  ) {
+    return this.productService.filter(+from, +to)
+  } 
+
+
+  @RolesAuth(Role.ADMIN, Role.OWNER)
   @Post()
   @UsePipes(new ValidationPipe())
   create(@Body() createProductDto: CreateProductDto) {
@@ -50,4 +59,6 @@ export class ProductController {
   remove(@Param('id', ParseIntPipe) id: number) {
     return this.productService.remove(id);
   }
+
+  
 }

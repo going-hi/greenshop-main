@@ -3,7 +3,7 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductEntity } from './entities/product.entity';
-import { ILike, Repository } from 'typeorm';
+import { Between, ILike, LessThan, Repository } from 'typeorm';
 
 @Injectable()
 export class ProductService {
@@ -54,7 +54,7 @@ export class ProductService {
   async search(query: string) {
     const products = await this.productRepository.find({
       where: {
-        name: ILike(`%${query}%`)
+        title: ILike(`%${query}%`)
       }
     })
 
@@ -69,5 +69,28 @@ export class ProductService {
 
   async remove(id: number) {
     await this.productRepository.delete(id)
+  }
+
+  async filter(fromPrice: number, toPrice = NaN) {
+    
+    let price;
+
+    if(isNaN(toPrice)) {
+      const productMaxPrice = await this.productRepository.find({
+        order: { price: 'DESC'}
+      })
+      
+      const maxPrice = productMaxPrice[0].price
+      console.log(maxPrice)
+      price = Between(fromPrice, maxPrice)
+    }else {
+      price = Between(fromPrice, toPrice)
+    }
+
+
+    const products = await this.productRepository.findAndCount({
+      where: {price}
+    })
+    return products
   }
 }
