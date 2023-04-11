@@ -33,4 +33,8 @@ export class CategoryService {
   async remove(id: number) {
     await this.categoryRepository.delete(id)
   }
+
+  async getById(id: number) {
+    return await this.categoryRepository.findOneBy({id})
+  }
 }
