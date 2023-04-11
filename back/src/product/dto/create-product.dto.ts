@@ -1,3 +1,4 @@
+import { Type } from "class-transformer"
 import { IsNumber, IsString, IsArray } from "class-validator"
 
 export class CreateProductDto {
@@ -7,6 +8,7 @@ export class CreateProductDto {
     @IsString()
     description: string
 
+    @Type(() => Number)
     @IsNumber()
     price: number
  
