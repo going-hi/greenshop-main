@@ -3,7 +3,7 @@ import { FileService } from './file.service';
 import { Module } from '@nestjs/common';
 
 @Module({
-  imports: [],
+  imports: [FileService],
   controllers: [],
   providers: [FileService],
 })
