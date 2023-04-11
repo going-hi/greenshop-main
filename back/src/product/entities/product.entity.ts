@@ -1,6 +1,7 @@
+import { CategoryEntity } from "src/category/entities/category.entity";
 import { RatingEntity } from "src/rating/entities/rating.entity";
 import { BaseEntity } from "src/utils/base.entity";
-import { Column, Entity, OneToMany } from "typeorm";
+import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
 
 @Entity('product')
 export class ProductEntity extends BaseEntity {
@@ -21,4 +22,7 @@ export class ProductEntity extends BaseEntity {
 
     @OneToMany(() => RatingEntity, rating => rating.product, {cascade: true})
     ratings: RatingEntity[]
+
+    @ManyToOne(() => CategoryEntity, category => category.products, {nullable: true})
+    category: CategoryEntity
 }
