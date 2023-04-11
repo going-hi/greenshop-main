@@ -2,7 +2,7 @@ import { IsNumber, IsString, IsArray } from "class-validator"
 
 export class CreateProductDto {
     @IsString()
-    name: string
+    title: string
 
     @IsString()
     description: string

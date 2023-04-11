@@ -5,12 +5,12 @@ import { Column, Entity, OneToMany } from "typeorm";
 @Entity('product')
 export class ProductEntity extends BaseEntity {
     @Column()
-    name: string
+    title: string
 
     @Column()
     description: string
 
-    @Column({type: 'money'})
+    @Column()
     price: number
 
     @Column('simple-array') 
