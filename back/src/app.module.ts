@@ -7,7 +7,7 @@ import { getTypeOrmOptions } from './config/typeorm.options';
 import { AuthModule } from './auth/auth.module';
 import { UserModule } from './user/user.module';
 import { ProductModule } from './product/product.module';
-import { RatingModule } from './rating/rating.module';
+import { ReviewModule } from './review/review.module';
 
 @Module({
   imports: [
@@ -21,7 +21,7 @@ import { RatingModule } from './rating/rating.module';
     AuthModule,
     UserModule,
     ProductModule,
-    RatingModule,
+    ReviewModule,
   ],
   controllers: [],
   providers: [],
