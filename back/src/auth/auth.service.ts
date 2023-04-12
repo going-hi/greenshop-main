@@ -22,8 +22,7 @@ export class AuthService {
 
         if(!oldUser) throw new BadRequestException('Пользователя с таким email нет')
 
-        const isMatch = compare(userDto.password, oldUser.password)
-
+        const isMatch = await compare(userDto.password, oldUser.password)
         if(!isMatch) throw new BadRequestException('Неверный пароль')
 
         const tokens = this.tokenService.generateTokens(oldUser)
