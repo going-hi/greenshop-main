@@ -4,13 +4,15 @@ import { ProductController } from './product.controller';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { ProductEntity } from './entities/product.entity';
 import { FileModule } from 'src/file/file.module';
+import { CategoryModule } from 'src/category/category.module';
 
 @Module({
   controllers: [ProductController],
   providers: [ProductService],
   imports: [
     TypeOrmModule.forFeature([ProductEntity]),
-    FileModule
+    FileModule,
+    CategoryModule
   ]
 })
 export class ProductModule {}

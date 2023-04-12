@@ -5,6 +5,7 @@ import { UpdateProductDto } from './dto/update-product.dto';
 import { RolesAuth } from 'src/roles/decorators/roles.decorator';
 import { Role } from 'src/roles/roles.enum';
 import { FileInterceptor } from '@nestjs/platform-express';
+import { SetCategoryDto } from './dto/set-category.dto';
 
 @Controller('product')
 export class ProductController {
@@ -40,6 +41,21 @@ export class ProductController {
     @Query('page') page = 1
   ) {
     return this.productService.findAll(+limit, +page);
+  }
+
+  @Get('category/:id')
+  getProductsByCategory(
+    @Param('id', ParseIntPipe) id: number,
+    @Query('limit') limit = 10,
+    @Query('page') page = 1
+  ) {
+    return this.productService.getProductsByCategory(id, limit, page)
+  }
+
+  @UsePipes(new ValidationPipe())
+  @Post('category')
+  setCategory(@Body() {productId, categoryId}: SetCategoryDto) {
+    return this.productService.setCategory(productId, categoryId)
   }
 
   @Get('search')

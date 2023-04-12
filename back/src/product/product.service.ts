@@ -3,15 +3,17 @@ import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ProductEntity } from './entities/product.entity';
-import { Between, ILike, LessThan, Repository } from 'typeorm';
+import { Between, ILike, Repository } from 'typeorm';
 import { FileService } from 'src/file/file.service';
+import { CategoryService } from 'src/category/category.service';
 
 @Injectable()
 export class ProductService {
 
   constructor(
     @InjectRepository(ProductEntity) private readonly productRepository: Repository<ProductEntity>,
-    private readonly fileService: FileService
+    private readonly fileService: FileService,
+    private readonly categoryService: CategoryService
   ) {}
 
   async create(createProductDto: CreateProductDto, file: Express.Multer.File) {
@@ -35,22 +37,22 @@ export class ProductService {
         id
       },
       relations: {
-        ratings: true
+        reviews: true
       }
     }) 
     if(!product) throw new NotFoundException()
 
     let rating
-    if(!product.ratings.length) {
+    if(!product.reviews.length) {
       rating = 0
     }else {
-      const ratingInt = product.ratings.map(obj => obj.rating )
+      const ratingInt = product.reviews.map(obj => obj.rating )
       rating = ratingInt.reduce(
         (accumulator, currentValue) => accumulator + currentValue, 0 
-      ) / product.ratings.length
+      ) / product.reviews.length
     }
    
-    delete product.ratings
+    delete product.reviews
     return { ...product, rating }
   }
 
@@ -99,5 +101,30 @@ export class ProductService {
       where: {price}
     })
     return products
+  }
+
+
+  async getProductsByCategory(categoryId: number, limit: number, page: number) {
+    const products = await this.productRepository.findAndCount({
+      where: {
+        category: {id: categoryId}
+      },
+      take: limit,
+      skip: page * limit - limit
+    })
+
+    return products
+  }
+
+  async setCategory(productId: number, categoryId: number) {
+    const category = await this.categoryService.getById(categoryId)
+    if(!category) throw new NotFoundException('Category with this id not found')
+
+    const product = await this.productRepository.findOneBy({id: productId})
+    if(!product) throw new NotFoundException('Product with this id not found')
+
+    product.category = category
+
+    return await this.productRepository.save(product)
   }
 }
