@@ -13,6 +13,7 @@ import { CategoryModule } from 'src/category/category.module';
     TypeOrmModule.forFeature([ProductEntity]),
     FileModule,
     CategoryModule
-  ]
+  ],
+  exports: [ProductService]
 })
 export class ProductModule {}
