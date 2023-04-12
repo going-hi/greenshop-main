@@ -19,13 +19,20 @@ export class ProductService {
   async create(createProductDto: CreateProductDto, file: Express.Multer.File) {
     const fileName = await this.fileService.saveFile(file)
     const product = this.productRepository.create({...createProductDto, photo: fileName})
-    return await this.productRepository.save(product)
+    let newProduct = await this.productRepository.save(product)
+
+    if(createProductDto.categoryId) {
+      newProduct = await this.setCategory(product.id, createProductDto.categoryId)
+    }
+    
+    return newProduct
   }
 
   async findAll(limit: number, page: number) {
     const products = await this.productRepository.findAndCount({
       take: limit,
-      skip: limit * page - limit
+      skip: limit * page - limit,
+      relations: {category: true}
     })
 
     return products
@@ -37,7 +44,8 @@ export class ProductService {
         id
       },
       relations: {
-        reviews: true
+        reviews: true,
+        category: true
       }
     }) 
     if(!product) throw new NotFoundException()
@@ -60,7 +68,8 @@ export class ProductService {
     const products = await this.productRepository.find({
       where: {
         title: ILike(`%${query}%`)
-      }
+      },
+      relations: {category: true}
     })
 
     return products
@@ -98,7 +107,8 @@ export class ProductService {
 
 
     const products = await this.productRepository.findAndCount({
-      where: {price}
+      where: {price},
+      relations: {category: true}
     })
     return products
   }
@@ -106,6 +116,7 @@ export class ProductService {
 
   async getProductsByCategory(categoryId: number, limit: number, page: number) {
     const products = await this.productRepository.findAndCount({
+      relations: {category: true},
       where: {
         category: {id: categoryId}
       },
@@ -126,5 +137,10 @@ export class ProductService {
     product.category = category
 
     return await this.productRepository.save(product)
+  }
+
+  async getById(id: number) {
+    const product = await this.productRepository.findOneBy({id})
+    return product
   }
 }
