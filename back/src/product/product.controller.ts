@@ -22,7 +22,7 @@ export class ProductController {
 
   @RolesAuth(Role.ADMIN, Role.OWNER)
   @Post()
-  @UsePipes(new ValidationPipe())
+  @UsePipes(new ValidationPipe({transform: true}))
   @UseInterceptors(FileInterceptor('photo'))
   create(
     @UploadedFile( 
