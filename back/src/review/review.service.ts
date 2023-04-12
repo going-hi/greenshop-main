@@ -1,21 +1,27 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ReviewEntity } from './entities/review.entity';
 import { Repository } from 'typeorm';
+import { ProductService } from 'src/product/product.service';
 
 @Injectable()
 export class ReviewService {
 
   constructor(
-    @InjectRepository(ReviewEntity) private readonly reviewRepository: Repository<ReviewEntity>
+    @InjectRepository(ReviewEntity) private readonly reviewRepository: Repository<ReviewEntity>,
+    private readonly productService: ProductService
   ) {}
 
-  async create(userId: number, createReviewDto: CreateReviewDto) {
+  async create(userId: number, {productId, rating, text}: CreateReviewDto) {
+
+    const product = await this.productService.getById(productId)
+    if(!product) throw new NotFoundException('Product this id not found')
+
     const oldReview = await this.reviewRepository.findOne({
       where: {
         user: {id: userId},
-        product: {id: createReviewDto.productId}
+        product: {id: productId}
       },
       relations: {
         user: true,
@@ -26,16 +32,18 @@ export class ReviewService {
         product: {id: true}
       }
     })
-
+  
     if(oldReview) {
-      oldReview.rating = createReviewDto.rating
+      oldReview.rating = rating
+      oldReview.text = text ?? null
       return await this.reviewRepository.save(oldReview)
     }
 
     const review = this.reviewRepository.create({
-      rating: createReviewDto.rating, 
+      rating, 
       user: {id: userId}, 
-      product: {id: createReviewDto.productId}
+      product: {id: productId},
+      text: text ?? null
     })
     return await this.reviewRepository.save(review)
   }
