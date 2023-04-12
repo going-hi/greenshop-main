@@ -24,5 +24,5 @@ export class UserEntity extends BaseEntity {
     role: Role
 
     @OneToMany(() => ReviewEntity, review => review.user, {cascade: true}) 
-    ratings: ReviewEntity[]
+    reviews: ReviewEntity[]
 }

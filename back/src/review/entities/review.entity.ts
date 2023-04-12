@@ -15,7 +15,7 @@ export class ReviewEntity extends BaseEntity {
     @Column({nullable: true})
     text: string
 
-    @ManyToOne(() => UserEntity, user => user.ratings, {onDelete: 'CASCADE'})
+    @ManyToOne(() => UserEntity, user => user.reviews, {onDelete: 'CASCADE'})
     user: UserEntity
 
     @ManyToOne(() => ProductEntity, product => product.reviews, {onDelete: 'CASCADE'})
