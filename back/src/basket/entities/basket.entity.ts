@@ -12,7 +12,7 @@ export class BasketEntity extends BaseEntity {
     @ManyToOne(() => ProductEntity, product => product.baskets, {onDelete: 'CASCADE'})
     product: ProductEntity
 
-    @Column() 
+    @Column({default: 1}) 
     count: number
 
     @Column({nullable: true})
