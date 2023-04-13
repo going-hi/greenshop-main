@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { CreateReviewDto } from './dto/create-review.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ReviewEntity } from './entities/review.entity';
@@ -10,6 +10,7 @@ export class ReviewService {
 
   constructor(
     @InjectRepository(ReviewEntity) private readonly reviewRepository: Repository<ReviewEntity>,
+    @Inject(forwardRef(() => ProductService))
     private readonly productService: ProductService
   ) {}
 
@@ -59,5 +60,12 @@ export class ReviewService {
     })
 
     return reviews
+  }
+
+  async getRatingProduct(productId: number) {
+    const findOptions = {product: {id: productId}}
+    const rating = await this.reviewRepository.findBy(findOptions)
+    const ratingsSum = await this.reviewRepository.sum('rating', findOptions)
+    return ratingsSum / rating.length
   }
 }

@@ -1,4 +1,4 @@
-import { Injectable, NotFoundException } from '@nestjs/common';
+import { Inject, Injectable, NotFoundException, forwardRef } from '@nestjs/common';
 import { CreateProductDto } from './dto/create-product.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { InjectRepository } from '@nestjs/typeorm';
@@ -6,6 +6,7 @@ import { ProductEntity } from './entities/product.entity';
 import { Between, ILike, Repository } from 'typeorm';
 import { FileService } from 'src/file/file.service';
 import { CategoryService } from 'src/category/category.service';
+import { ReviewService } from 'src/review/review.service';
 
 @Injectable()
 export class ProductService {
@@ -13,7 +14,9 @@ export class ProductService {
   constructor(
     @InjectRepository(ProductEntity) private readonly productRepository: Repository<ProductEntity>,
     private readonly fileService: FileService,
-    private readonly categoryService: CategoryService
+    private readonly categoryService: CategoryService,
+    @Inject(forwardRef(() => ReviewService))
+    private readonly reviewService: ReviewService
   ) {}
 
   async create(createProductDto: CreateProductDto, file: Express.Multer.File) {
@@ -50,17 +53,7 @@ export class ProductService {
     }) 
     if(!product) throw new NotFoundException()
 
-    let rating
-    if(!product.reviews.length) {
-      rating = 0
-    }else {
-      const ratingInt = product.reviews.map(obj => obj.rating )
-      rating = ratingInt.reduce(
-        (accumulator, currentValue) => accumulator + currentValue, 0 
-      ) / product.reviews.length
-    }
-   
-    delete product.reviews
+    let rating = await this.reviewService.getRatingProduct(id)
     return { ...product, rating }
   }
 
