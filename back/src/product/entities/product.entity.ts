@@ -1,3 +1,4 @@
+import { BasketEntity } from "src/basket/entities/basket.entity";
 import { CategoryEntity } from "src/category/entities/category.entity";
 import { ReviewEntity } from "src/review/entities/review.entity";
 import { BaseEntity } from "src/utils/base.entity";
@@ -25,4 +26,7 @@ export class ProductEntity extends BaseEntity {
 
     @ManyToOne(() => CategoryEntity, category => category.products, {nullable: true})
     category: CategoryEntity
+
+    @OneToMany(() => BasketEntity, basket => basket.product, {cascade: true})
+    baskets: BasketEntity[]
 }
