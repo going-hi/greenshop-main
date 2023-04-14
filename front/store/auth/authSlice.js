@@ -9,13 +9,15 @@ export const fetchRegister = createAsyncThunk(
   }
 );
 
-export const fetchAuth = createAsyncThunk(
-  "auth/fetchUserData",
-  async (params) => {
-    const { data } = await instance.post("/api/auth/login", params);
-    return data;
-  }
-);
+export const fetchAuth = createAsyncThunk("auth/fetchAuth", async (params) => {
+  const { data } = await instance.post("/api/auth/login", params);
+  return data;
+});
+
+export const fetchAuthMe = createAsyncThunk("auth/fetchAuthMe", async () => {
+  const { data } = await instance.get("/api/auth/refresh");
+  return data;
+});
 
 const initialState = {
   data: null,
@@ -52,6 +54,18 @@ const authSlice = createSlice({
       state.data = action.payload;
     },
     [fetchAuth.refected]: (state) => {
+      state.status = "error";
+      state.data = null;
+    },
+    [fetchAuthMe.pending]: (state) => {
+      state.status = "loading";
+      state.data = null;
+    },
+    [fetchAuthMe.fulfilled]: (state, action) => {
+      state.status = "loaded";
+      state.data = action.payload;
+    },
+    [fetchAuthMe.refected]: (state) => {
       state.status = "error";
       state.data = null;
     },
