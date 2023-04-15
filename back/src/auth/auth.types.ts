@@ -19,4 +19,3 @@ export class ResSuccessLogin extends Tokens {
     user: User
 }
 
-

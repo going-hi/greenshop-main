@@ -7,8 +7,6 @@ import {hash, compare} from 'bcrypt'
 import { TokenService } from './token.service';
 import { ResSuccessLogin, Tokens } from './auth.types';
 
-
-
 @Injectable()
 export class AuthService {
     constructor(
@@ -82,7 +80,4 @@ export class AuthService {
     async logout(refreshToken: string): Promise<void> {
         await this.tokenService.removeToken(refreshToken)
     }
-
-    
-    
 }
