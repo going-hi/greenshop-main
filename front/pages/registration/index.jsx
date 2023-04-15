@@ -1,37 +1,61 @@
-import Link from "next/link";
-import { getAuth, createUserWithEmailAndPassword } from "firebase/auth";
 import React from "react";
-import { useDispatch } from "react-redux";
-import Form from "@/components/form/form";
-import { setUser } from "@/store/slices/userSlice";
+import { useForm } from "react-hook-form";
+import { useDispatch, useSelector } from "react-redux";
+import { fetchRegister, selectIsAuth } from "@/store/auth/authSlice";
+import { useRouter } from "next/router";
 
 const Register = () => {
+  const isAuth = useSelector(selectIsAuth);
   const dispatch = useDispatch();
+  const router = useRouter(selectIsAuth);
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    defaultValues: {
+      email: "",
+      password: "",
+    },
+    mode: "onChange",
+  });
 
-  const handleRegister = (email, password) => {
-    const auth = getAuth();
-    console.log(auth);
-    createUserWithEmailAndPassword(auth, email, password)
-      .then(({ user }) => {
-        console.log(user);
-        dispatch(
-          setUser({
-            email: user.email,
-            id: user.uid,
-            token: user.accesToken,
-          })
-        );
-      })
-      .catch(console.error);
+  const onSubmit = async (values) => {
+    const data = await dispatch(fetchRegister(values));
+    console.log(data);
+
+    if (!data.payload) {
+      return alert("Не удалось зарегестироватся");
+    }
+
+    if ('accessToken' in data.payload) {
+      window.localStorage.setItem("accessToken", data.payload.accessToken);
+    }
   };
+
+  if (isAuth) {
+    router.push("/");
+    return null;
+  }
 
   return (
     <>
-      <h1>Регистрация</h1>
-      <Form title="Регистрация" handleClick={handleRegister} />
-      <p>
-        Уже есть аккаунт? <Link href="/login">Войти</Link>
-      </p>
+      <h2>Регистрация</h2>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <input
+          type="email"
+          placeholder="Почта"
+          {...register("email", { require: "Укажите почту" })}
+        />
+        <p>{errors.email?.message}</p>
+        <input
+          type="password"
+          placeholder="пароль"
+          {...register("password", { require: "Укажите пароль" })}
+        />
+        <p>{errors.password?.message}</p>
+        <button type="submit">кнопка</button>
+      </form>
     </>
   );
 };
