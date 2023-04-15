@@ -11,7 +11,6 @@ export class RolesService {
    async setRoleUser({role, userId}: ActionRoleDto) {
         const user = await this.userService.setRoleUser(userId, role)
         if(!user) throw new ForbiddenException()
-
         return
    } 
 }

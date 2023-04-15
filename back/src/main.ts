@@ -10,6 +10,7 @@ async function bootstrap() {
   app.enableCors()
 
   const config = new DocumentBuilder()
+    .addBearerAuth()
     .setTitle('Api GreenShop')
     .setDescription('API description')
     .setVersion('1.0')
