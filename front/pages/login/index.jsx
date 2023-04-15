@@ -33,10 +33,10 @@ const Login = () => {
     }
   };
 
-  if (isAuth) {
-    router.push("/");
-    return null;
-  }
+  // if (isAuth) {
+  //   router.push("/");
+  //   return null;
+  // }
   return (
     <>
       <h2>Авторизация</h2>

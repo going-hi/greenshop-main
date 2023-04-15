@@ -15,6 +15,7 @@ const Header = () => {
   const onClickLogout = () => {
     if (window.confirm("Вы действительно хотитей выйти?")) {
       dispatch(logout());
+      window.localStorage.removeItem("accessToken");
     }
   };
 
@@ -39,12 +40,17 @@ const Header = () => {
       </nav>
       <span>
         {isAuth ? (
-          <button onClick={onClickLogout}>Выйти </button>
+          <>
+            <button onClick={onClickLogout}>Выйти </button>
+            <h1>вы вошли</h1>
+          </>
         ) : (
           <Link href="/login">
             <button type="button">войти</button>
+            <h1>вы не вошли</h1>
           </Link>
         )}
+        <button onClick={onClickLogout}>Выйти </button>
         <Link href="/registration">
           <span>регистрация</span>
         </Link>
