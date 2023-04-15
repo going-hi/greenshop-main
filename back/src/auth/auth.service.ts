@@ -5,6 +5,9 @@ import { Repository } from 'typeorm';
 import { UserDto } from './dto/user.dto';
 import {hash, compare} from 'bcrypt'
 import { TokenService } from './token.service';
+import { ResSuccessLogin, Tokens } from './auth.types';
+
+
 
 @Injectable()
 export class AuthService {
@@ -13,7 +16,7 @@ export class AuthService {
         private readonly tokenService: TokenService
     ){}
 
-    async login(userDto: UserDto) {
+    async login(userDto: UserDto): Promise<ResSuccessLogin> {
         const oldUser = await this.userRepositoty.findOne({
             where: {
                 email: userDto.email
@@ -38,7 +41,7 @@ export class AuthService {
 
     }
 
-    async registration(userDto: UserDto) {
+    async registration(userDto: UserDto): Promise<ResSuccessLogin> {
         const oldUser = await this.userRepositoty.findOne({
             where: {
                 email: userDto.email
@@ -63,7 +66,7 @@ export class AuthService {
         }
     }   
     // * user id and his token
-    async refresh(id: number, token: string){
+    async refresh(id: number, token: string): Promise<Tokens> {
         const refreshToken = await this.tokenService.getToken(token)
         const user = await this.userRepositoty.findOne({
             where: {id}
@@ -76,7 +79,7 @@ export class AuthService {
         return tokens
     }
 
-    async logout(refreshToken: string) {
+    async logout(refreshToken: string): Promise<void> {
         await this.tokenService.removeToken(refreshToken)
     }
 
