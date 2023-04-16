@@ -8,7 +8,6 @@ export class ActionRoleDto {
     @NotEquals(Role.OWNER)
     role: Role
 
-    @ApiProperty()
     @IsInt()
     userId: number
 }
