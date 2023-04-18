@@ -6,6 +6,7 @@ import { UserDto } from './dto/user.dto';
 import {hash, compare} from 'bcrypt'
 import { TokenService } from './token.service';
 import { ResSuccessLogin, Tokens } from './auth.types';
+import { INCORRECT_PASSWORD, USER_ALREADY_EXISTS, USER_NOT_FOUND } from './error.auth.constants';
 @Injectable()
 export class AuthService {
     constructor(
@@ -20,10 +21,10 @@ export class AuthService {
             }
         })
 
-        if(!oldUser) throw new BadRequestException('Пользователя с таким email нет')
+        if(!oldUser) throw new BadRequestException(USER_NOT_FOUND)
 
         const isMatch = await compare(userDto.password, oldUser.password)
-        if(!isMatch) throw new BadRequestException('Неверный пароль')
+        if(!isMatch) throw new BadRequestException(INCORRECT_PASSWORD)
 
         const tokens = this.tokenService.generateTokens(oldUser)
         await this.tokenService.saveToken(tokens.refreshToken, oldUser.id)
@@ -45,7 +46,7 @@ export class AuthService {
             }
         })
         if(oldUser) {
-            throw new BadRequestException('Пользователь с таким email уже существует')
+            throw new BadRequestException(USER_ALREADY_EXISTS)
         }
 
         const hashPassword = await hash(userDto.password, 8)
@@ -79,7 +80,4 @@ export class AuthService {
     async logout(refreshToken: string): Promise<void> {
         await this.tokenService.removeToken(refreshToken)
     }
-
-    
-    
 }
