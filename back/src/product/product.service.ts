@@ -7,6 +7,8 @@ import { Between, ILike, Repository } from 'typeorm';
 import { FileService } from 'src/file/file.service';
 import { CategoryService } from 'src/category/category.service';
 import { ReviewService } from 'src/review/review.service';
+import { PRODUCT_NOT_FOUND } from './product.error.constants';
+import { CATEGORY_NOT_FOUND } from 'src/category/category.error.constants';
 
 @Injectable()
 export class ProductService {
@@ -122,10 +124,10 @@ export class ProductService {
 
   async setCategory(productId: number, categoryId: number) {
     const category = await this.categoryService.getById(categoryId)
-    if(!category) throw new NotFoundException('Category with this id not found')
+    if(!category) throw new NotFoundException(CATEGORY_NOT_FOUND)
 
     const product = await this.productRepository.findOneBy({id: productId})
-    if(!product) throw new NotFoundException('Product with this id not found')
+    if(!product) throw new NotFoundException(PRODUCT_NOT_FOUND)
 
     product.category = category
 
