@@ -3,6 +3,7 @@ import { CategoryEntity } from "src/category/entities/category.entity";
 import { ReviewEntity } from "src/review/entities/review.entity";
 import { BaseEntity } from "src/utils/base.entity";
 import { Column, Entity, ManyToOne, OneToMany } from "typeorm";
+import { BasketEntity } from "src/basket/entities/basket.entity";
 
 @Entity('product')
 export class ProductEntity extends BaseEntity {
@@ -33,4 +34,7 @@ export class ProductEntity extends BaseEntity {
     @ApiProperty()
     @ManyToOne(() => CategoryEntity, category => category.products, {nullable: true})
     category: CategoryEntity
+
+    @OneToMany(() => BasketEntity, basket => basket.product, {cascade: true})
+    baskets: BasketEntity[]
 }
