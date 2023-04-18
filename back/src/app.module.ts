@@ -9,6 +9,7 @@ import { UserModule } from './user/user.module';
 import { ProductModule } from './product/product.module';
 import { CategoryModule } from './category/category.module';
 import { ReviewModule } from './review/review.module';
+import { BlogModule } from './blog/blog.module';
 
 @Module({
   imports: [
@@ -25,6 +26,7 @@ import { ReviewModule } from './review/review.module';
     ProductModule,
     ReviewModule,
     CategoryModule,
+    BlogModule,
   ],
   controllers: [],
   providers: [],
