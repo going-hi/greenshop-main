@@ -4,6 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ReviewEntity } from './entities/review.entity';
 import { Repository } from 'typeorm';
 import { ProductService } from 'src/product/product.service';
+import { PRODUCT_NOT_FOUND } from 'src/product/product.error.constants';
 
 @Injectable()
 export class ReviewService {
@@ -17,7 +18,7 @@ export class ReviewService {
   async create(userId: number, {productId, rating, text}: CreateReviewDto) {
 
     const product = await this.productService.getById(productId)
-    if(!product) throw new NotFoundException('Product this id not found')
+    if(!product) throw new NotFoundException(PRODUCT_NOT_FOUND)
 
     const oldReview = await this.reviewRepository.findOne({
       where: {
