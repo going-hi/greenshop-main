@@ -46,14 +46,14 @@ export class BlogService {
 
   async update(id: number, updateBlogDto: UpdateBlogDto) {
     const blog = await this.findOne(id)
-    if(!blog) throw new NotFoundException('Blog with this id not found')
+    if(!blog) throw new NotFoundException()
 
     return await this.blogRepository.save({...blog, ...updateBlogDto})
   }
 
   async remove(id: number) {
     const blog = await this.findOne(id)
-    if(!blog) throw new NotFoundException('Blog with this id not found')
+    if(!blog) throw new NotFoundException()
     await this.fileService.removeFile(blog.preview)
     await this.blogRepository.remove(blog)
   }
