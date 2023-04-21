@@ -9,6 +9,7 @@ import { UserModule } from './user/user.module';
 import { ProductModule } from './product/product.module';
 import { CategoryModule } from './category/category.module';
 import { ReviewModule } from './review/review.module';
+import { BlogModule } from './blog/blog.module';
 import { BasketModule } from './basket/basket.module';
 
 @Module({
@@ -26,7 +27,8 @@ import { BasketModule } from './basket/basket.module';
     ProductModule,
     ReviewModule,
     CategoryModule,
-    BasketModule,
+    BlogModule,
+    BasketModule
   ],
   controllers: [],
   providers: [],

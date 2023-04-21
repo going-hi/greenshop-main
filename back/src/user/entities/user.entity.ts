@@ -1,5 +1,6 @@
 import { TokenEntity } from "src/auth/entities/token.entity";
 import { BasketEntity } from "src/basket/entities/basket.entity";
+import { BlogEntity } from "src/blog/entities/blog.entity";
 import { ReviewEntity } from "src/review/entities/review.entity";
 import { Role } from "src/roles/roles.enum";
 import { BaseEntity } from "src/utils/base.entity";
@@ -27,6 +28,10 @@ export class UserEntity extends BaseEntity {
     @OneToMany(() => ReviewEntity, review => review.user, {cascade: true}) 
     reviews: ReviewEntity[]
 
+    @OneToMany(() => BlogEntity, blog => blog.author)
+    blogs: BlogEntity[]
+
     @OneToMany(() => BasketEntity, basket => basket.user, {cascade: true})
     baskets: BasketEntity[]
-}
+
+} 
