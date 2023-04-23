@@ -11,6 +11,8 @@ import { CategoryModule } from './category/category.module';
 import { ReviewModule } from './review/review.module';
 import { BlogModule } from './blog/blog.module';
 import { BasketModule } from './basket/basket.module';
+import { ServeStaticModule } from '@nestjs/serve-static';
+import { join } from 'path';
 
 @Module({
   imports: [
@@ -28,7 +30,10 @@ import { BasketModule } from './basket/basket.module';
     ReviewModule,
     CategoryModule,
     BlogModule,
-    BasketModule
+    BasketModule,
+    ServeStaticModule.forRoot({
+      rootPath: join(__dirname, '..', 'uploads')
+    })
   ],
   controllers: [],
   providers: [],
