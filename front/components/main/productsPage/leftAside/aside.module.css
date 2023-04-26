@@ -1,0 +1,27 @@
+.aside {
+  background: #fbfbfb;
+  padding: 14px 24px 36px 18px;
+  width: 310px;
+}
+
+.aside h4 {
+  font-weight: 700;
+  font-size: 18px;
+  line-height: 16px;
+  color: #3d3d3d;
+  padding-bottom: 10px;
+}
+
+.list {
+  display: flex;
+  justify-content: space-between;
+  padding-left: 10px;
+}
+
+.list p {
+  font-weight: 700;
+  font-size: 15px;
+  line-height: 32px;
+  color: #3d3d3d;
+  padding-bottom: 5px;
+}

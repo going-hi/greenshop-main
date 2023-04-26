@@ -1,0 +1,29 @@
+.right {
+  width: 100%;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-gap: 40px;
+  column-gap: 50px;
+}
+
+@media (max-width: 1440px) {
+  .right {
+    grid-gap: 25px;
+    column-gap: 30px;
+  }
+}
+
+@media (max-width: 1200px) {
+  .right {
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    grid-gap: 10px;
+    column-gap: 15px;
+  }
+}
+
+@media (max-width: 900px) {
+  .right {
+    grid-template-columns: 1fr;
+    column-gap: 10px;
+  }
+}
