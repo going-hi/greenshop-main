@@ -12,7 +12,12 @@ import { TokenService } from './token.service';
 
 @Module({
   controllers: [AuthController],
-  providers: [AuthService, AccessStrategy, RefreshStrategy, TokenService],
+  providers: [
+    AuthService, 
+    AccessStrategy, 
+    RefreshStrategy, 
+    TokenService
+  ],
   imports: [
     ConfigModule,
     JwtModule.register({}),

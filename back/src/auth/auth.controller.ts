@@ -9,7 +9,7 @@ import { User } from './decorators/user.decorator';
 import { Cookie } from './decorators/cookie.decorator';
 import { ApiTags, ApiResponse, ApiBadRequestResponse, ApiOperation, ApiHeader, ApiOkResponse, ApiUnauthorizedResponse } from '@nestjs/swagger';
 
-@ApiTags('auth')
+@ApiTags('Auth')
 @Controller('auth')
 export class AuthController {
   constructor(private readonly authService: AuthService) {}

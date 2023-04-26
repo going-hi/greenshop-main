@@ -18,7 +18,8 @@ export class TokenService {
     generateTokens(user: UserEntity) {
         const payload = {
             id: user.id,
-            email: user.email
+            email: user.email,
+            role: user.role
         }
 
         const accessToken = this.jwtService.sign(payload, {expiresIn: '30m', secret: this.configService.get(ACCESS_SECRET)})
